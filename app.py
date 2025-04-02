@@ -12,6 +12,7 @@ st.markdown("""
     .title {
         color: #4f8bf9;
         text-align: center;
+        margin-bottom: 15px;
     }
     .sidebar .sidebar-content {
         background-color: #f0f2f6;
