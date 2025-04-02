@@ -12,7 +12,6 @@ st.markdown("""
     .title {
         color: #4f8bf9;
         text-align: center;
-        margin-bottom: 15px;
     }
     .sidebar .sidebar-content {
         background-color: #f0f2f6;
@@ -135,11 +134,6 @@ with st.sidebar:
         max_value=20,
         value=10
     )
-    st.markdown("---")
-    st.markdown("**How it works:**")
-    st.markdown("1. Select a game from the dropdown")
-    st.markdown("2. Adjust the number of recommendations")
-    st.markdown("3. Discover new games to play!")
 
 # Main content
 try:
