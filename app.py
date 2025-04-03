@@ -19,7 +19,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("Steam Game Recommender")
+st.title("Steam Game Recommender 🎮")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
 st.markdown("---")
 
@@ -93,7 +93,7 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
 
 # Sidebar
 with st.sidebar:
-    st.header("Search Options")
+    st.header("Search Options 🔍")
     st.markdown("")
     try:
         game_options = sorted(df['name'].dropna().unique())
