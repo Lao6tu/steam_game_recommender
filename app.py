@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -38,8 +39,6 @@ st.markdown("""
 # Header
 st.markdown("<h1 class='title'>Steam Game Recommender</h1>", unsafe_allow_html=True)
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
-
-import os
 
 # Load data and models
 @st.cache_data
@@ -149,7 +148,7 @@ try:
             try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
-                    st.image(image_urls[game_query], width=200, caption=selected_game['name'])
+                    st.image(image_urls[game_query], width=350, caption=selected_game['name'])
                 else:
                     st.markdown(f"**{selected_game['name']}**")
                     st.markdown("*Image not available*")
@@ -189,7 +188,7 @@ try:
                         # Use the image URL from the dictionary for recommended games
                         game_name = row['Game']
                         if game_name in image_urls and image_urls[game_name]:
-                            st.image(image_urls[game_name], width=150)
+                            st.image(image_urls[game_name], width=300)
                         else:
                             st.markdown(f"*Image not available*")
                     except:
@@ -215,7 +214,6 @@ try:
                             st.markdown(f"{description}")
                     except:
                         st.markdown("*No description available*")
-                st.markdown("---")
     else:
         st.warning(f"Game '{game_query}' not found in the dataset.")
         if matches:
