@@ -170,7 +170,7 @@ try:
         
         # Display recommendations
         for i, row in recommendations.iterrows():
-            col1, col2 = st.columns([1, 4])
+            col1, col2 = st.columns([1, 3])
             with col1:
                 try:
                     # Use the image URL from the dictionary for recommended games
