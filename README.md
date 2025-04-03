@@ -12,7 +12,7 @@ The dataset has:
 > Use multi-hot encoding (binary columns for each genre).
 
 * Game Descriptions (NLP)
-> Use TF-IDF or Sentence-BERT (SBERT) embeddings to convert descriptions into fixed-length vectors.
+> Use TF-IDF or Sentence-BERT (SBERT) embeddings to convert descriptions into fixed-length vectors.\
 > Example: sentence-transformers/all-MiniLM-L6-v2 (384-dim embeddings).
 
 ### 1.2 Handling Numerical Data
