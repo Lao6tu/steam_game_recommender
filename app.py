@@ -93,7 +93,7 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
 
 # Sidebar
 with st.sidebar:
-    st.header("🔍 Search Options")
+    st.header("🔍 :blue[Search Options]")
     st.markdown("")
     try:
         game_options = sorted(df['name'].dropna().unique())
