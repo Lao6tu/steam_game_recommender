@@ -1,4 +1,4 @@
-# steam game recommendation system
+# Steam Game Recommendation System (DEC)
 
 ## Step 1: Data Preprocessing
 
@@ -66,13 +66,13 @@ After pre-training:
 
 ### 4.2 Recommend Similar Games
 For a given game G in cluster C:
-*Find the N nearest neighbors (in latent space) within C.
-*Return these as recommendations.
+* Find the N nearest neighbors (in latent space) within C.
+* Return these as recommendations.
 
 ### 4.3 Hybrid Approach (Optional)
 Combine DEC with collaborative filtering:
-*Use DEC clusters as a content-based filter.
-*Add user-play history for personalized recommendations.
+* Use DEC clusters as a content-based filter.
+* Add user-play history for personalized recommendations.
 
 ## Step 5: Evaluation
 Since there are no ground-truth labels (unsupervised), use:
