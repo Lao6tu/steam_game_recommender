@@ -25,7 +25,7 @@ Concatenate:
 * Scaled numerical features
 
 > Example final feature vector:
-> [genre_Action, genre_RPG, ..., desc_embedding_1, ..., peak_players_scaled, ...]
+"[genre_Action, genre_RPG, ..., desc_embedding_1, ..., peak_players_scaled, ...]"
 
 ## Step 2: Dimensionality Reduction (Optional)
 If the combined feature dimension is too high (e.g., >1000), apply:
@@ -42,7 +42,7 @@ Train a deep autoencoder to reconstruct the input features.
 > Example architecture: 
 > Encoder:   Input → Dense(512, ReLU) → Dense(256, ReLU) → Latent (64-dim)  
 > Decoder:   Latent → Dense(256, ReLU) → Dense(512, ReLU) → Output (reconstruction)
-Loss: Mean Squared Error (MSE).
+* Loss: Mean Squared Error (MSE).
 
 ### 3.2 Clustering Phase
 After pre-training:
