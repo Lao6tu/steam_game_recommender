@@ -10,10 +10,6 @@ st.set_page_config(page_title="Game Recommender", layout="wide")
 # Custom CSS
 st.markdown("""
 <style>
-    .title {
-        color: #4f8bf9;
-        text-align: center;
-    }
     .sidebar .sidebar-content {
         background-color: #f0f2f6;
     }
