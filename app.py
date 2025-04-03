@@ -177,6 +177,7 @@ try:
                     # Use the image URL from the dictionary for recommended games
                     game_name = row['Game']
                     if game_name in image_urls and image_urls[game_name]:
+                        st.markdown("")
                         st.image(image_urls[game_name], width=200)
                     else:
                         st.markdown(f"*Image not available*")
