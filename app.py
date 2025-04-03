@@ -24,6 +24,7 @@ st.markdown("""
 # Header
 st.title("Steam Game Recommender")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
+st.markdown("---")
 
 # Load data and models
 @st.cache_data
