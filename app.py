@@ -1,4 +1,6 @@
+
 import streamlit as st
+import os
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -9,24 +11,6 @@ st.set_page_config(page_title="Game Recommender", layout="wide")
 # Custom CSS
 st.markdown("""
 <style>
-    .title {
-        color: #4f8bf9;
-        text-align: center;
-    }
-    .sidebar .sidebar-content {
-        background-color: #f0f2f6;
-    }
-    .recommendation-card {
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        background-color: white;
-    }
-    .recommendation-card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
     .footer {
         font-size: small;
         color: gray;
@@ -36,10 +20,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.markdown("<h1 class='title'>Steam Game Recommender</h1>", unsafe_allow_html=True)
+st.title(":blue[Steam Game Recommender] 🎮")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
-
-import os
+st.markdown("---")
 
 # Load data and models
 @st.cache_data
@@ -111,11 +94,12 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
 
 # Sidebar
 with st.sidebar:
-    st.header("Search Options")
+    st.header("🔍 :blue[Search Options]")
+    st.markdown("")
     try:
         game_options = sorted(df['name'].dropna().unique())
         # Set default game to PUBG: BATTLEGROUNDS
-        default_game = "PUBG: BATTLEGROUNDS"
+        default_game = "Black Myth: Wukong"
         default_index = game_options.index(default_game) if default_game in game_options else 0
         
         game_query = st.selectbox(
@@ -127,18 +111,15 @@ with st.sidebar:
     except Exception as e:
         st.error(f"Error loading game list: {str(e)}")
         st.stop()
+
+    st.markdown("")
         
     num_recommendations = st.slider(
         "Number of recommendations:",
-        min_value=3,
+        min_value=5,
         max_value=20,
         value=10
     )
-    st.markdown("---")
-    st.markdown("**How it works:**")
-    st.markdown("1. Select a game from the dropdown")
-    st.markdown("2. Adjust the number of recommendations")
-    st.markdown("3. Discover new games to play!")
 
 # Main content
 try:
@@ -154,7 +135,8 @@ try:
             try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
-                    st.image(image_urls[game_query], width=200, caption=selected_game['name'])
+                    st.markdown("")
+                    st.image(image_urls[game_query], width=200)
                 else:
                     st.markdown(f"**{selected_game['name']}**")
                     st.markdown("*Image not available*")
@@ -184,43 +166,43 @@ try:
         
         st.markdown("---")
         st.subheader(f"Recommended Similar Games ({len(recommendations)} results)")
+        st.markdown("")
         
         # Display recommendations
         for i, row in recommendations.iterrows():
-            with st.container():
-                col1, col2 = st.columns([1, 4])
-                with col1:
-                    try:
-                        # Use the image URL from the dictionary for recommended games
-                        game_name = row['Game']
-                        if game_name in image_urls and image_urls[game_name]:
-                            st.image(image_urls[game_name], width=150)
-                        else:
-                            st.markdown(f"*Image not available*")
-                    except:
-                        st.markdown("*Image not available*")
-                with col2:
-                    st.markdown(f"### {row['Game']}")
-                    st.markdown(f"**Similarity:** {row['Similarity Score']*100:.1f}%")
-                    try:
-                        price = float(row['Price'])
-                        st.markdown(f"**Price:** ${price:.2f}")
-                    except:
-                        st.markdown("**Price:** Not available")
-                    try:
-                        tags = eval(row['Tags']) if isinstance(row['Tags'], str) else row['Tags']
-                        st.markdown(f"**Tags:** {', '.join(tags)}")
-                    except:
-                        st.markdown("**Tags:** No tags available")
-                    try:
-                        description = row['Description']
-                        if pd.isna(description) or description == "":
-                            st.markdown("*No description available*")
-                        else:
-                            st.markdown(f"{description}")
-                    except:
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                try:
+                    # Use the image URL from the dictionary for recommended games
+                    game_name = row['Game']
+                    if game_name in image_urls and image_urls[game_name]:
+                        st.markdown("")
+                        st.image(image_urls[game_name], width=200)
+                    else:
+                        st.markdown(f"*Image not available*")
+                except:
+                    st.markdown("*Image not available*")
+            with col2:
+                st.markdown(f"### {row['Game']}")
+                st.markdown(f"**Similarity:** {row['Similarity Score']*100:.1f}%")
+                try:
+                    price = float(row['Price'])
+                    st.markdown(f"**Price:** ${price:.2f}")
+                except:
+                    st.markdown("**Price:** Not available")
+                try:
+                    tags = eval(row['Tags']) if isinstance(row['Tags'], str) else row['Tags']
+                    st.markdown(f"**Tags:** {', '.join(tags)}")
+                except:
+                    st.markdown("**Tags:** No tags available")
+                try:
+                    description = row['Description']
+                    if pd.isna(description) or description == "":
                         st.markdown("*No description available*")
-                st.markdown("---")
+                    else:
+                        st.markdown(f"{description}")
+                except:
+                    st.markdown("*No description available*")
     else:
         st.warning(f"Game '{game_query}' not found in the dataset.")
         if matches:
