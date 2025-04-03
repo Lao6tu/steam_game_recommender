@@ -115,7 +115,7 @@ with st.sidebar:
         
     num_recommendations = st.slider(
         "Number of recommendations:",
-        min_value=3,
+        min_value=5,
         max_value=20,
         value=10
     )
