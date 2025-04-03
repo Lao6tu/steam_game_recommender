@@ -10,9 +10,6 @@ st.set_page_config(page_title="Game Recommender", layout="wide")
 # Custom CSS
 st.markdown("""
 <style>
-    .sidebar .sidebar-content {
-        background-color: #f0f2f6;
-    }
     .footer {
         font-size: small;
         color: gray;
@@ -137,6 +134,7 @@ try:
             try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
+                    st.markdown("")
                     st.image(image_urls[game_query], width=200)
                 else:
                     st.markdown(f"**{selected_game['name']}**")
