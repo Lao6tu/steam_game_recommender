@@ -17,17 +17,6 @@ st.markdown("""
     .sidebar .sidebar-content {
         background-color: #f0f2f6;
     }
-    .recommendation-card {
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        transition: 0.3s;
-        background-color: white;
-    }
-    .recommendation-card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    }
     .footer {
         font-size: small;
         color: gray;
@@ -148,7 +137,7 @@ try:
             try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
-                    st.image(image_urls[game_query], width=350, caption=selected_game['name'])
+                    st.image(image_urls[game_query], width=250, caption=selected_game['name'])
                 else:
                     st.markdown(f"**{selected_game['name']}**")
                     st.markdown("*Image not available*")
@@ -188,7 +177,7 @@ try:
                         # Use the image URL from the dictionary for recommended games
                         game_name = row['Game']
                         if game_name in image_urls and image_urls[game_name]:
-                            st.image(image_urls[game_name], width=300)
+                            st.image(image_urls[game_name], width=200)
                         else:
                             st.markdown(f"*Image not available*")
                     except:
