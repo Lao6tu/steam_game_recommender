@@ -137,7 +137,7 @@ try:
             try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
-                    st.image(image_urls[game_query], width=250, caption=selected_game['name'])
+                    st.image(image_urls[game_query], width=200, caption=selected_game['name'])
                 else:
                     st.markdown(f"**{selected_game['name']}**")
                     st.markdown("*Image not available*")
