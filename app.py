@@ -98,7 +98,7 @@ with st.sidebar:
     try:
         game_options = sorted(df['name'].dropna().unique())
         # Set default game to PUBG: BATTLEGROUNDS
-        default_game = "PUBG: BATTLEGROUNDS"
+        default_game = "Black Myth: Wukong"
         default_index = game_options.index(default_game) if default_game in game_options else 0
         
         game_query = st.selectbox(
