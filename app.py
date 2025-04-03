@@ -26,8 +26,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.markdown("<h1 class='title'>Steam Game Recommender</h1>", unsafe_allow_html=True)
-st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
+st.title("Steam Game Recommender")
+st.title("### Discover games similar to your favorites based on our AI-powered recommendation system.")
 
 # Load data and models
 @st.cache_data
