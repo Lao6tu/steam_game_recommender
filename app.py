@@ -113,7 +113,7 @@ with st.sidebar:
         st.error(f"Error loading game list: {str(e)}")
         st.stop()
 
-    st.markdown()
+    st.markdown("")
         
     num_recommendations = st.slider(
         "Number of recommendations:",
