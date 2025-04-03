@@ -24,7 +24,7 @@ Concatenate:
 * Description embeddings
 * Scaled numerical features
 
-> Example final feature vector:
+> Example final feature vector:\
 "[genre_Action, genre_RPG, ..., desc_embedding_1, ..., peak_players_scaled, ...]"
 
 ## Step 2: Dimensionality Reduction (Optional)
