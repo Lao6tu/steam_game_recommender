@@ -25,7 +25,7 @@ Concatenate:
 * Scaled numerical features
 
 > Example final feature vector:\
-"[genre_Action, genre_RPG, ..., desc_embedding_1, ..., peak_players_scaled, ...]"
+`[genre_Action, genre_RPG, ..., desc_embedding_1, ..., peak_players_scaled, ...]`
 
 ## Step 2: Dimensionality Reduction (Optional)
 If the combined feature dimension is too high (e.g., >1000), apply:
