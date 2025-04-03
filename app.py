@@ -167,6 +167,7 @@ try:
         
         st.markdown("---")
         st.subheader(f"Recommended Similar Games ({len(recommendations)} results)")
+        st.markdown("")
         
         # Display recommendations
         for i, row in recommendations.iterrows():
