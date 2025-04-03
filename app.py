@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Set page config first (must be the first Streamlit command)
-st.set_page_config(page_title="Game Recommender", page_icon="🎮", layout="wide")
+st.set_page_config(page_title="Game Recommender", layout="wide")
 
 # Custom CSS
 st.markdown("""
