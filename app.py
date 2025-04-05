@@ -160,9 +160,9 @@ try:
                 if pd.isna(description) or description == "":
                     st.markdown("**Description:** No description available")
                 else:
-                    st.markdown(f"**Description:** {description}")
+                    st.markdown(f"{description}")
             except:
-                st.markdown("**Description:** No description available")
+                st.markdown("No description available")
         
         st.markdown("---")
         st.subheader(f"Recommended Similar Games ({len(recommendations)} results)")
