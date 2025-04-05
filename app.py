@@ -28,21 +28,18 @@ st.markdown("---")
 @st.cache_data
 def load_data():
     try:
-        # Get the absolute path to the saved_models directory
+        # Get the absolute path to the directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        models_dir = os.path.join(current_dir, 'saved_models')
+        models_dir = os.path.join(current_dir, 'models_2')
         
         # Load all model files from the same directory
-        df = pd.read_parquet(os.path.join(models_dir, 'steam_games_features.parquet'), engine="pyarrow")
+        df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
         cluster_data = np.load(os.path.join(models_dir, "dec_results.npz"))
         df['cluster'] = cluster_data["assignments"]
         latent_data = np.load(os.path.join(models_dir, "latent_features.npz"))
-        latent_features = latent_data["features"]
+        latent_features = latent_data["assignments"]
         name_to_index = pd.Series(df.index, index=df['name'])
-        
-        # Load the games_march2025_cleaned.csv file for image URLs
-        image_df = pd.read_csv(os.path.join(current_dir, 'games_march2025_cleaned.csv'), usecols=['name', 'header_image'])
-        # Create a dictionary mapping game names to image URLs
+        image_df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
         image_urls = pd.Series(image_df['header_image'].values, index=image_df['name']).to_dict()
         
         return df, latent_features, name_to_index, image_urls
