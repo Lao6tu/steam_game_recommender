@@ -1,10 +1,11 @@
-# Steam Game Recommendation System (DEC)
+# Steam Game Recommendation System
 
 The original dataset is from Kaggle [https://www.kaggle.com/datasets/artermiloff/steam-games-dataset](url),\
 and powered by Steam Game Scraper Repository [https://github.com/FronkonGames/Steam-Games-Scraper](url).
 
 This dataset is up to date as of March 2025.\
-The shape of original dataset is  (88899, 47), which contains multiple data types such as text, image and numerical data.
+The shape of original dataset is  (88899, 47), which contains multiple data types such as text, image and numerical data.\
+I will implement deep embedding clustering model to reduce the dimensionality of dataset and extract meaningful features into a latent space to find the clusters and similarity of the games.
 
 ## Step 1: Data Preprocessing
 
