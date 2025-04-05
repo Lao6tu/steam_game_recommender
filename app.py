@@ -158,7 +158,7 @@ try:
             try:
                 description = selected_game['short_description']
                 if pd.isna(description) or description == "":
-                    st.markdown("**Description:** No description available")
+                    st.markdown("No description available")
                 else:
                     st.markdown(f"{description}")
             except:
