@@ -80,6 +80,6 @@ Since there are no ground-truth labels (unsupervised), use:
 * Cluster Coherence (e.g., do games in a cluster share similar genres?).
 * User Feedback (A/B testing recommendations).
 
-#Latent Space Data Clusters
+# Latent Space Data Clusters
 ![data_structure](https://github.com/user-attachments/assets/0faa5211-4e06-4b89-ac25-29e35b7c6ebe)
 
