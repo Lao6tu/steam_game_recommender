@@ -1,7 +1,7 @@
 # Steam Game Recommendation System (DEC)
 
 The original dataset is from Kaggle [https://www.kaggle.com/datasets/artermiloff/steam-games-dataset](url),\
-and powered by Steam Game Scraper Repositories [https://github.com/FronkonGames/Steam-Games-Scraper](url).
+and powered by Steam Game Scraper Repository [https://github.com/FronkonGames/Steam-Games-Scraper](url).
 
 This dataset is up to date as of March 2025.\
 The shape of original dataset is  (88899, 47), which contains multiple data types such as text, image and numerical data.
