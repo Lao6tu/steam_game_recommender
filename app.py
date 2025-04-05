@@ -126,7 +126,7 @@ try:
         selected_idx = name_to_index[game_query]
         selected_game = df.iloc[selected_idx]
         
-        col1, col2 = st.columns([1, 3])
+        col1, col2 = st.columns([1, 2])
         with col1:
             try:
                 # Use the image URL from the dictionary
@@ -166,7 +166,7 @@ try:
         
         # Display recommendations
         for i, row in recommendations.iterrows():
-            col1, col2 = st.columns([1, 3])
+            col1, col2 = st.columns([1, 2])
             with col1:
                 try:
                     # Use the image URL from the dictionary for recommended games
