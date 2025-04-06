@@ -146,7 +146,7 @@ try:
             except:
                 st.markdown("*Image not available*")
         with col2:
-            st.subheader(f"{selected_game['name']}:green-badge[{df['release_year'].iloc[selected_idx]}]")
+            st.subheader(f"{selected_game['name']} :green-badge[{df['release_year'].iloc[selected_idx]}]")
             try:
                 price = float(selected_game['price'])
                 st.markdown(f"**Price:** ${price:.2f}")
