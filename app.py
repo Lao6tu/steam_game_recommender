@@ -1,7 +1,7 @@
 import streamlit as st
-import os
 import pandas as pd
 import numpy as np
+import os
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Set page config first (must be the first Streamlit command)
@@ -11,7 +11,6 @@ st.set_page_config(page_title="Game Recommender", layout="wide")
 st.markdown("""
 <style>
     .footer {
-        font-size: small;
         color: gray;
         text-align: center;
     }
@@ -19,9 +18,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title(":blue[Steam Game Recommender] 🎮")
+st.title("🎮 :violet[Steam Game Recommender]")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
-st.markdown("---")
+st.markdown("")
+st.markdown("")
 
 # Load data and models
 @st.cache_data
@@ -35,11 +35,11 @@ def load_data():
         df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
         cluster_data = np.load(os.path.join(models_dir, "dec_results.npz"))
         df['cluster'] = cluster_data["assignments"]
+        df['release_year'] = pd.to_datetime(df['release_date'], errors='coerce').dt.year
         latent_data = np.load(os.path.join(models_dir, "latent_features.npz"))
         latent_features = latent_data["assignments"]
         name_to_index = pd.Series(df.index, index=df['name'])
-        image_df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
-        image_urls = pd.Series(image_df['header_image'].values, index=image_df['name']).to_dict()
+        image_urls = pd.Series(df['header_image'].values, index=df['name']).to_dict()
         
         return df, latent_features, name_to_index, image_urls
     except Exception as e:
@@ -89,40 +89,50 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
     st.stop()
 
 # Sidebar
-with st.sidebar:
-    st.header("🔍 :blue[Search Options]")
-    st.divider()
-    try:
-        game_options = sorted(df['name'].dropna().unique())
-        # Set default game to PUBG: BATTLEGROUNDS
-        default_game = "Black Myth: Wukong"
-        default_index = game_options.index(default_game) if default_game in game_options else 0
-        
-        game_query = st.selectbox(
-            "Search for a game:",
-            options=game_options,
-            index=default_index,
-            help="Start typing to find a game"
-        )
-    except Exception as e:
-        st.error(f"Error loading game list: {str(e)}")
-        st.stop()
-
+with st.sidebar:  
+    st.title("⚙️ :violet[Search Options]")
     st.markdown("")
-        
+
+    # Number of Recommendations
     num_recommendations = st.slider(
         "Number of recommendations:",
         min_value=5,
         max_value=20,
         value=10
     )
+    # Release year filter
+    min_year = int(df['release_year'].min())
+    max_year = int(df['release_year'].max())
+    year_range = st.slider(
+        "Release year range:",
+        min_value=min_year,
+        max_value=max_year,
+        value=(min_year, max_year),
+        step=1
+)
+
+# Select Box
+try:
+    game_options = df.sort_values('estimated_owners', ascending=False)['name']
+    game_query = st.selectbox(
+        "**Search Box**",
+        options=game_options,
+        index=None,
+        placeholder="🔍 Search for a steam game...",
+        label_visibility='collapsed'
+    )
+    if not game_query:
+        game_query = "Black Myth: Wukong"
+except Exception as e:
+    st.error(f"Error loading game list: {str(e)}")
+    st.stop()
+st.divider()
 
 # Main content
 try:
     recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls)
 
     if recommendations is not None:
-        # Show the selected game
         selected_idx = name_to_index[game_query]
         selected_game = df.iloc[selected_idx]
         
@@ -133,19 +143,15 @@ try:
                 if game_query in image_urls and image_urls[game_query]:
                     st.markdown("")
                     st.image(image_urls[game_query], width=250)
-                else:
-                    st.markdown(f"**{selected_game['name']}**")
-                    st.markdown("*Image not available*")
             except:
-                st.markdown(f"**{selected_game['name']}**")
                 st.markdown("*Image not available*")
         with col2:
-            st.subheader(selected_game['name'])
+            st.subheader(f"{selected_game['name']}:green-badge[{df['release_year'].iloc[selected_idx]}]")
             try:
                 price = float(selected_game['price'])
                 st.markdown(f"**Price:** ${price:.2f}")
             except:
-                st.markdown("**Price:** Not available")
+                st.markdown("**Price: Not available**")
             try:
                 tags = eval(selected_game['tags_list']) if isinstance(selected_game['tags_list'], str) else selected_game['tags_list']
                 st.markdown(f"**Tags:** {', '.join(tags)}")
@@ -154,14 +160,14 @@ try:
             try:
                 description = selected_game['short_description']
                 if pd.isna(description) or description == "":
-                    st.markdown("No description available")
+                    st.markdown("*No description available*")
                 else:
-                    st.markdown(f"{description}")
+                    st.markdown(f"*{description}*")
             except:
-                st.markdown("No description available")
+                st.markdown("*No description available*")
         
         st.markdown("---")
-        st.subheader(f"Recommended Similar Games ({len(recommendations)} results)")
+        st.header(f"*Recommended Similar Games ({len(recommendations)} results)*")
         st.markdown("")
         
         # Display recommendations
@@ -179,8 +185,8 @@ try:
                 except:
                     st.markdown("*Image not available*")
             with col2:
-                st.markdown(f"### {row['Game']}")
-                st.markdown(f"**Similarity:** {row['Similarity Score']*100:.1f}%")
+                st.subheader(f"{row['Game']} :green-badge[{df['release_year'].iloc[name_to_index[game_name]]}]")
+                st.markdown(f":violet-badge[**Similarity**: {row['Similarity Score']*100:.1f}%]")
                 try:
                     price = float(row['Price'])
                     st.markdown(f"**Price:** ${price:.2f}")
@@ -196,7 +202,7 @@ try:
                     if pd.isna(description) or description == "":
                         st.markdown("*No description available*")
                     else:
-                        st.markdown(f"{description}")
+                        st.markdown(f"*{description}*")
                 except:
                     st.markdown("*No description available*")
             st.divider()
@@ -211,5 +217,5 @@ except Exception as e:
     st.error(f"An error occurred: {str(e)}")
 
 # Footer
-st.markdown("---")
-st.markdown("<p class='footer'>Game recommendation system powered by Deep Embedding Clustering</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>Powered by Sentence-Transformer and Deep Embedding Clustering</p>", unsafe_allow_html=True)
+st.divider()
