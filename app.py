@@ -91,7 +91,7 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
 # Sidebar
 with st.sidebar:
     st.header("🔍 :blue[Search Options]")
-    st.markdown("")
+    st.divider()
     try:
         game_options = sorted(df['name'].dropna().unique())
         # Set default game to PUBG: BATTLEGROUNDS
@@ -199,6 +199,7 @@ try:
                         st.markdown(f"{description}")
                 except:
                     st.markdown("*No description available*")
+            st.divider()
     else:
         st.warning(f"Game '{game_query}' not found in the dataset.")
         if matches:
