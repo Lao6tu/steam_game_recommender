@@ -141,7 +141,7 @@ try:
                 # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
                     st.markdown("")
-                    st.image(image_urls[game_query], width=300)
+                    st.image(image_urls[game_query])
             except:
                 st.markdown("*Image not available*")
         with col2:
@@ -178,7 +178,7 @@ try:
                     game_name = row['Game']
                     if game_name in image_urls and image_urls[game_name]:
                         st.markdown("")
-                        st.image(image_urls[game_name], width=300)
+                        st.image(image_urls[game_name])
                     else:
                         st.markdown(f"*Image not available*")
                 except:
