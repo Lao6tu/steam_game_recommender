@@ -166,7 +166,7 @@ try:
                 st.markdown("*No description available*")
         
         st.markdown("---")
-        st.header(f"*Recommended Similar Games ({len(recommendations)} results)*")
+        st.subheader(f":red[Recommended Similar Games ({len(recommendations)} results)]")
         st.markdown("")
         
         # Display recommendations
