@@ -18,7 +18,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🎮 :violet[Steam Game Recommender]")
+st.title("🎮 :red[Steam Game Recommender]")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
 st.markdown("")
 
@@ -185,7 +185,7 @@ try:
                     st.markdown("*Image not available*")
             with col2:
                 st.subheader(f"{row['Game']} :green-badge[{df['release_year'].iloc[name_to_index[game_name]]}]")
-                st.markdown(f":violet-badge[**Similarity**: {row['Similarity Score']*100:.1f}%]")
+                st.markdown(f":red-badge[**Similarity**: {row['Similarity Score']*100:.1f}%]")
                 try:
                     price = float(row['Price'])
                     st.markdown(f"**Price:** ${price:.2f}")
