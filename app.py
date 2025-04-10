@@ -166,8 +166,8 @@ try:
                 st.markdown("*No description available*")
         
         st.markdown("---")
-        st.header(f":Recommended Similar Games ({len(recommendations)} results)")
-        st.markdown("")
+        st.header(f"Recommended Similar Games ({len(recommendations)} results)")
+        st.markdown("---")
         
         # Display recommendations
         for i, row in recommendations.iterrows():
