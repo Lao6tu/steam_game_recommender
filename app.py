@@ -5,7 +5,7 @@ import os
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Set page config first (must be the first Streamlit command)
-st.set_page_config(page_title="Steam Game Recommender", layout="wide")
+st.set_page_config(page_title="Steam Game Recommender", layout="centered")
 
 # Custom CSS
 st.markdown("""
