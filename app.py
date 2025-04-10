@@ -89,7 +89,7 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
 
 # Sidebar
 with st.sidebar:  
-    st.title("⚙️ :violet[Search Options]")
+    st.title("⚙️ :red[Search Options]")
     st.markdown("")
 
     # Number of Recommendations
