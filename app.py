@@ -5,7 +5,7 @@ import os
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Set page config first (must be the first Streamlit command)
-st.set_page_config(page_title="Steam Game Recommender", layout="wide")
+st.set_page_config(page_title="Steam Game Recommender", icon="👍", layout="wide")
 
 # Custom CSS
 st.markdown("""
@@ -18,7 +18,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🎮 Steam Game Recommender")
+st.title("🕹️ Steam Game Recommender")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
 st.markdown("")
 
