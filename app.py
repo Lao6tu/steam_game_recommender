@@ -110,7 +110,7 @@ def get_game_recommendations(game_title, n=10, df=None, latent_features=None, na
         return None, ["An error occurred while generating recommendations"]
 
 # Load data
-df, latent_features, name_to_index, image_urls = load_data()
+df, latent_features, name_to_index, image_urls = load_data(selected_models)
 
 # Check if data loaded successfully
 if df is None or latent_features is None or name_to_index is None or image_urls is None:
