@@ -24,11 +24,12 @@ st.markdown("")
 
 # Load data and models
 @st.cache_data
-def load_data():
+def load_data(selected_models):
     try:
         # Get the absolute path to the directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        models_dir = os.path.join(current_dir, 'models_2')
+        # Create the full path to the selected models directory
+        models_dir = os.path.join(current_dir, selected_models)
         
         # Load all model files from the same directory
         df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
@@ -108,7 +109,13 @@ with st.sidebar:
         max_value=max_year,
         value=(min_year, max_year),
         step=1
-)
+    )
+    # Set up the sidebar radio selection
+    selected_models = st.radio(
+        "Select Models Directory",
+        options=["models_1", "models_2", "models_3"],
+        index=2  # Default to models_2
+    )
 
 # Select Box
 try:
