@@ -84,7 +84,7 @@ def load_data(selected_models):
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1998,2025)):
+def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1997,2025)):
     if df is None or latent_features is None or name_to_index is None:
         return None, ["Data not loaded properly"]
     
