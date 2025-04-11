@@ -88,7 +88,7 @@ def get_game_recommendations(game_title, n=10, df=None, latent_features=None, na
         game_embed = latent_features[idx].reshape(1, -1)
         
         min_year, max_year = year_range
-        filtered_df = filtered_df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)]
+        filtered_df = df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)]
 
         cluster_indices = filtered_df[filtered_df['cluster'] == game_cluster].index.tolist()
         if not cluster_indices:
