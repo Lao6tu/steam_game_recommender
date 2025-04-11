@@ -221,7 +221,7 @@ try:
                     st.markdown("*No description available*")
             st.divider()
     else:
-        st.warning(f"Game '{game_query}' not found in the dataset.")
+        st.warning(f"Game '{game_query}' not found in the dataset. Try reduce year range.")
         if matches:
             st.info("Did you mean one of these games?")
             for match in matches:
