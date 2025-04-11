@@ -48,7 +48,7 @@ with st.sidebar:
     selected_models = st.radio(
         "Select Models Directory",
         options=["models_1", "models_2", "models_3"],
-        index=1  # Default to models_2
+        index=0
     )
 
 # Load data and models
