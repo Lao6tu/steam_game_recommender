@@ -25,6 +25,7 @@ st.markdown("")
 # Sidebar
 with st.sidebar:  
     st.title("⚙️ :red[Search Options]")
+    st.markdown("")
 
     # Number of Recommendations
     num_recommendations = st.slider(
