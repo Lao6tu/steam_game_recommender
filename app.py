@@ -45,7 +45,7 @@ with st.sidebar:
     # Set up the sidebar radio selection
     selected_models = st.radio(
         "Select Models Directory",
-        ["models_1", "models_2"],
+        ["models_1", "models_2", "models_3"],
         index=0
     )
 
