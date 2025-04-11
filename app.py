@@ -37,11 +37,17 @@ with st.sidebar:
     # Release year filter
     year_range = st.slider(
         "Release year range:",
-        min_value=1998,
+        min_value=1997,
         max_value=2025,
-        value=(1998, 2025),
+        value=(1997, 2025),
         step=1
     )
+    # Multi-select price category
+    options = ['Free', 'Budget', 'Mid-range', 'Premium', 'AAA']
+    price_range = st.segmented_control(
+        "Price range:", options, selection_mode="multi"
+    )
+    st.divider()
     # Set up the sidebar radio selection
     selected_models = st.radio(
         "Select Models Directory",
@@ -185,8 +191,6 @@ try:
                     if game_name in image_urls and image_urls[game_name]:
                         st.markdown("")
                         st.image(image_urls[game_name])
-                    else:
-                        st.markdown(f"*Image not available*")
                 except:
                     st.markdown("*Image not available*")
             with col2:
@@ -210,6 +214,11 @@ try:
                         st.markdown(f"*{description}*")
                 except:
                     st.markdown("*No description available*")
+                # Unique key per game
+                feedback = st.feedback(
+                    "thumbs",
+                    key=f"feedback_{row['Game']}",  
+                )
             st.divider()
     else:
         st.warning(f"Game '{game_query}' not found in the dataset.")
