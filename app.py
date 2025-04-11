@@ -42,10 +42,14 @@ with st.sidebar:
         value=(1998, 2025),
         step=1
     )
-    # Set up the sidebar radio selection
+    # Model type selection
     selected_models = st.radio(
-        "Select Models Directory",
-        ["models_1", "models_2"],
+        "Select model type:",
+        ["models_1": , "models_2"],
+        captions=[
+            "Content based model",
+            "Name based model",
+        ],
         index=0
     )
 
