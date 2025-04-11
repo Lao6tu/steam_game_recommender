@@ -25,7 +25,7 @@ st.markdown("")
 # Sidebar
 with st.sidebar:  
     st.title("⚙️ :red[Search Options]")
-    st.markdown("")
+    st.divider()
 
     # Number of Recommendations
     num_recommendations = st.slider(
@@ -43,9 +43,10 @@ with st.sidebar:
         step=1
     )
     # Multi-select price category
-    options = ['Free', 'Budget', 'Mid-range', 'Premium', 'AAA']
-    price_range = st.segmented_control(
-        "Price range:", options, selection_mode="multi"
+    price_range = st.st.segmented_control(
+        "Price range:",
+        options = ['Free', 'Budget', 'Mid-range', 'AAA'],
+        selection_mode="multi"
     )
     st.divider()
     # Set up the sidebar radio selection
@@ -84,17 +85,32 @@ def load_data(selected_models):
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1998,2025)):
+def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1998,2025), price_range=("Free","AAA")):
     if df is None or latent_features is None or name_to_index is None:
         return None, ["Data not loaded properly"]
-    
     try:
         idx = name_to_index[game_title]
         game_cluster = df.iloc[idx]['cluster']
         game_embed = latent_features[idx].reshape(1, -1)
-        
+        price_categories = {
+            'Free': (0, 0),
+            'Budget': (0.01, 10),
+            'Mid-range': (10.01, 30),
+            'AAA': (30.01, float('inf'))
+        }
+        # Year filter
         min_year, max_year = year_range
         filtered_df = df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)]
+        # Price filter
+        if price_range:  # Only filter if at least one price range is selected
+            price_conditions = []
+            for price_cat in price_range:
+                min_p, max_p = price_categories[price_cat]
+                price_conditions.append(
+                    (filtered_df['price'] >= min_p) & 
+                    (filtered_df['price'] <= max_p)
+                )
+            filtered_df = filtered_df[np.logical_or.reduce(price_conditions)]
 
         cluster_indices = filtered_df[filtered_df['cluster'] == game_cluster].index.tolist()
         if not cluster_indices:
@@ -113,8 +129,7 @@ def get_game_recommendations(game_title, n=10, df=None, latent_features=None, na
             'Price': df.iloc[similar_indices]['price'].values,
             'Tags': df.iloc[similar_indices]['tags_list'].values,
             'Description': df.iloc[similar_indices]['short_description'].values
-        })
-        
+        })  
         return recommendations, None
     
     except KeyError:
@@ -129,7 +144,7 @@ df, latent_features, name_to_index, image_urls = load_data(selected_models)
 
 # Check if data loaded successfully
 if df is None or latent_features is None or name_to_index is None or image_urls is None:
-    st.error("Failed to load required data files. Please check that all model files exist in the saved_models directory.")
+    st.error("Failed to load required data files. Please check that all model files exist in the models directory.")
     st.stop()
 
 # Select Box
@@ -152,7 +167,7 @@ st.divider()
 
 # Main content
 try:
-    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls, year_range)
+    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls, year_range, price_range)
 
     if recommendations is not None:
         selected_idx = name_to_index[game_query]
