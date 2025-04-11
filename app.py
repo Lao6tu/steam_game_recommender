@@ -50,8 +50,12 @@ with st.sidebar:
     st.divider()
     # Set up the sidebar radio selection
     selected_models = st.radio(
-        "Select Models Directory",
+        "Select model type:",
         ["models_1", "models_2"],
+        captions=[
+            "Content based model",
+            "Name based model",
+        ],
         index=0
     )
 
@@ -80,7 +84,7 @@ def load_data(selected_models):
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None):
+def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1998,2025)):
     if df is None or latent_features is None or name_to_index is None:
         return None, ["Data not loaded properly"]
     
@@ -89,7 +93,14 @@ def get_game_recommendations(game_title, n=10, df=None, latent_features=None, na
         game_cluster = df.iloc[idx]['cluster']
         game_embed = latent_features[idx].reshape(1, -1)
         
-        cluster_indices = df[df['cluster'] == game_cluster].index.tolist()
+        min_year, max_year = year_range
+        filtered_df = df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)]
+
+        cluster_indices = filtered_df[filtered_df['cluster'] == game_cluster].index.tolist()
+        if not cluster_indices:
+            st.warning("No games found in the selected year range. Showing recommendations from all years.")
+            cluster_indices = df[df['cluster'] == game_cluster].index.tolist()
+            
         cluster_latent = latent_features[cluster_indices]
         similarities = cosine_similarity(game_embed, cluster_latent)[0]
         
@@ -141,7 +152,7 @@ st.divider()
 
 # Main content
 try:
-    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls)
+    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls, year_range)
 
     if recommendations is not None:
         selected_idx = name_to_index[game_query]
@@ -150,7 +161,6 @@ try:
         col1, col2 = st.columns([1, 2], gap="large")
         with col1:
             try:
-                # Use the image URL from the dictionary
                 if game_query in image_urls and image_urls[game_query]:
                     st.markdown("")
                     st.image(image_urls[game_query])
@@ -186,7 +196,6 @@ try:
             col1, col2 = st.columns([1, 2], gap="large")
             with col1:
                 try:
-                    # Use the image URL from the dictionary for recommended games
                     game_name = row['Game']
                     if game_name in image_urls and image_urls[game_name]:
                         st.markdown("")
@@ -221,12 +230,12 @@ try:
                 )
             st.divider()
     else:
-        st.warning(f"Game '{game_query}' not found in the dataset.")
+        st.warning(f"Game '{game_query}' not found in the dataset. Try reduce year range.")
         if matches:
             st.info("Did you mean one of these games?")
             for match in matches:
                 if st.button(match):
-                    st.experimental_rerun()  # Update the query with the selected match
+                    st.experimental_rerun()
 except Exception as e:
     st.error(f"An error occurred: {str(e)}")
 
