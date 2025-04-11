@@ -22,6 +22,35 @@ st.title("🕹️ :rainbow[Steam Game Recommender]")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
 st.markdown("")
 
+# Sidebar
+with st.sidebar:  
+    st.title("⚙️ :red[Search Options]")
+    st.markdown("")
+
+    # Number of Recommendations
+    num_recommendations = st.slider(
+        "Number of recommendations:",
+        min_value=5,
+        max_value=20,
+        value=10
+    )
+    # Release year filter
+    min_year = 1998
+    max_year = 2025
+    year_range = st.slider(
+        "Release year range:",
+        min_value=min_year,
+        max_value=max_year,
+        value=(min_year, max_year),
+        step=1
+    )
+    # Set up the sidebar radio selection
+    selected_models = st.radio(
+        "Select Models Directory",
+        options=["models_1", "models_2", "models_3"],
+        index=2  # Default to models_2
+    )
+
 # Load data and models
 @st.cache_data
 def load_data(selected_models):
@@ -88,34 +117,34 @@ if df is None or latent_features is None or name_to_index is None or image_urls 
     st.error("Failed to load required data files. Please check that all model files exist in the saved_models directory.")
     st.stop()
 
-# Sidebar
-with st.sidebar:  
-    st.title("⚙️ :red[Search Options]")
-    st.markdown("")
+# # Sidebar
+# with st.sidebar:  
+#     st.title("⚙️ :red[Search Options]")
+#     st.markdown("")
 
-    # Number of Recommendations
-    num_recommendations = st.slider(
-        "Number of recommendations:",
-        min_value=5,
-        max_value=20,
-        value=10
-    )
-    # Release year filter
-    min_year = int(df['release_year'].min())
-    max_year = int(df['release_year'].max())
-    year_range = st.slider(
-        "Release year range:",
-        min_value=min_year,
-        max_value=max_year,
-        value=(min_year, max_year),
-        step=1
-    )
-    # Set up the sidebar radio selection
-    selected_models = st.radio(
-        "Select Models Directory",
-        options=["models_1", "models_2", "models_3"],
-        index=2  # Default to models_2
-    )
+#     # Number of Recommendations
+#     num_recommendations = st.slider(
+#         "Number of recommendations:",
+#         min_value=5,
+#         max_value=20,
+#         value=10
+#     )
+#     # Release year filter
+#     min_year = 1998
+#     max_year = 2025
+#     year_range = st.slider(
+#         "Release year range:",
+#         min_value=min_year,
+#         max_value=max_year,
+#         value=(min_year, max_year),
+#         step=1
+#     )
+#     # Set up the sidebar radio selection
+#     selected_models = st.radio(
+#         "Select Models Directory",
+#         options=["models_1", "models_2", "models_3"],
+#         index=2  # Default to models_2
+#     )
 
 # Select Box
 try:
