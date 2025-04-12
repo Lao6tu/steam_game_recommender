@@ -52,7 +52,7 @@ with st.sidebar:
     # Set up the sidebar radio selection
     selected_models = st.radio(
         "Select model type:",
-        ["models_1", "models_2"],
+        ["models_1", "models_2", "models_3"],
         captions=[
             "Content based model",
             "Name based model",
