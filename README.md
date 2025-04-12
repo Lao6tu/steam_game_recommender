@@ -10,8 +10,8 @@ I will implement deep embedding clustering model to reduce the dimensionality of
 ## Step 1: Data Preprocessing
 
 The dataset has:
-* Text columns (genres, descriptions)
-* Numerical columns (peak players, estimated owners, review percentages)
+* Text columns (genres, descriptions...)
+* Numerical columns (peak players, estimated owners, review percentages...)
 
 ### 1.1 Handling Text Data
 * Genres (Multi-label Categorical)

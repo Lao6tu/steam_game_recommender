@@ -25,7 +25,7 @@ st.markdown("")
 # Sidebar
 with st.sidebar:  
     st.title("⚙️ :red[Search Options]")
-    st.divider()
+    st.markdown("")
 
     # Number of Recommendations
     num_recommendations = st.slider(
@@ -43,7 +43,7 @@ with st.sidebar:
         step=1
     )
     # Multi-select price category
-    price_range = st.st.segmented_control(
+    price_range = st.segmented_control(
         "Price range:",
         options = ['Free', 'Budget', 'Mid-range', 'AAA'],
         selection_mode="multi"
@@ -52,10 +52,11 @@ with st.sidebar:
     # Set up the sidebar radio selection
     selected_models = st.radio(
         "Select model type:",
-        ["models_1", "models_2"],
+        ["models_1", "models_2", "models_3"],
         captions=[
             "Content based model",
             "Name based model",
+            "General model"
         ],
         index=0
     )
@@ -85,7 +86,7 @@ def load_data(selected_models):
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1998,2025), price_range=("Free","AAA")):
+def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1997,2025), price_range=("Free","AAA")):
     if df is None or latent_features is None or name_to_index is None:
         return None, ["Data not loaded properly"]
     try:
