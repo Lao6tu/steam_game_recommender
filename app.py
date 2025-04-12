@@ -74,6 +74,7 @@ def load_data(selected_models):
         df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
         cluster_data = np.load(os.path.join(models_dir, "dec_results.npz"))
         df['cluster'] = cluster_data["assignments"]
+        df['release_year'] = pd.to_datetime(df['release_date'], errors='coerce').dt.year
         latent_data = np.load(os.path.join(models_dir, "latent_features.npz"))
         latent_features = latent_data["assignments"]
         name_to_index = pd.Series(df.index, index=df['name'])
