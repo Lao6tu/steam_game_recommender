@@ -56,6 +56,7 @@ with st.sidebar:
         captions=[
             "Content based model",
             "Name based model",
+            "General model"
         ],
         index=0
     )
