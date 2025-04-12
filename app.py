@@ -256,5 +256,5 @@ except Exception as e:
     st.error(f"An error occurred: {str(e)}")
 
 # Footer
-st.markdown("<p class='footer'>Powered by Sentence-Transformer and Deep Embedding Clustering</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>Game data updated by March 2025</p>", unsafe_allow_html=True)
 st.divider()
