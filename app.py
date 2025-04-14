@@ -18,7 +18,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header
-st.title("🕹️ :rainbow[Steam Game Recommender]")
+st.title("🎮 :rainbow[Steam Game Recommender]")
 st.markdown("Discover games similar to your favorites based on our AI-powered recommendation system.")
 st.markdown("")
 
