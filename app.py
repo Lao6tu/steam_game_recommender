@@ -50,9 +50,9 @@ with st.sidebar:
     )
     st.divider()
     # Set up the sidebar radio selection
-    selected_models = st.radio(
+    selected_model = st.radio(
         "Select model type:",
-        ["models_1", "models_2", "models_3"],
+        ["model 1", "model 2", "model 3"],
         captions=[
             "Content based model",
             "Name based model",
@@ -63,12 +63,16 @@ with st.sidebar:
 
 # Load data and models
 @st.cache_data
-def load_data(selected_models):
+def load_data(selected_model):
     try:
+        if selected_model == "model 1": selected_model = "models_1"
+        elif selected_model == "model 2": selected_model = "models_2"
+        elif selected_model == "model 3": selected_model = "models_3"
+
         # Get the absolute path to the directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
         # Create the full path to the selected models directory
-        models_dir = os.path.join(current_dir, selected_models)
+        models_dir = os.path.join(current_dir, selected_model)
         
         # Load all model files from the same directory
         df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
@@ -86,7 +90,9 @@ def load_data(selected_models):
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, name_to_index=None, image_urls=None, year_range=(1997,2025), price_range=("Free","AAA")):
+def get_game_recommendations(game_title, n=10, df=None, latent_features=None, 
+                             name_to_index=None, image_urls=None, year_range=(1997,2025),
+                             price_range=("Free","AAA")):
     if df is None or latent_features is None or name_to_index is None:
         return None, ["Data not loaded properly"]
     try:
@@ -141,7 +147,7 @@ def get_game_recommendations(game_title, n=10, df=None, latent_features=None, na
         return None, ["An error occurred while generating recommendations"]
 
 # Load data
-df, latent_features, name_to_index, image_urls = load_data(selected_models)
+df, latent_features, name_to_index, image_urls = load_data(selected_model)
 
 # Check if data loaded successfully
 if df is None or latent_features is None or name_to_index is None or image_urls is None:
