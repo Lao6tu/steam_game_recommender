@@ -1,5 +1,5 @@
 scikit-learn
-streamlit
-pandas
-numpy
-os
+# streamlit
+# pandas
+# numpy
+# os
