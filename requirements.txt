@@ -1,1 +1,5 @@
 scikit-learn
+streamlit
+pandas
+numpy
+os

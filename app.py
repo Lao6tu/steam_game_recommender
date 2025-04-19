@@ -4,7 +4,7 @@ import numpy as np
 import os
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Set page config first (must be the first Streamlit command)
+# Set page config
 st.set_page_config(page_title="Steam Game Recommender", page_icon="🕹️", layout="wide")
 
 # Custom CSS
@@ -34,6 +34,7 @@ with st.sidebar:
         max_value=20,
         value=10
     )
+
     # Release year filter
     year_range = st.slider(
         "Release year range:",
@@ -42,21 +43,24 @@ with st.sidebar:
         value=(1997, 2025),
         step=1
     )
+
     # Multi-select price category
     price_range = st.segmented_control(
         "Price range:",
         options = ['Free', 'Budget', 'Mid-range', 'AAA'],
         selection_mode="multi"
     )
+
     st.divider()
+
     # Set up the sidebar radio selection
     selected_model = st.radio(
         "Select model type:",
-        ["model 1", "model 2", "model 3"],
+        options = ["model 1", "model 2", "model 3"],
         captions=[
+            "General model",
             "Content based model",
-            "Name based model",
-            "General model"
+            "Name based model"
         ],
         index=0
     )
@@ -65,93 +69,90 @@ with st.sidebar:
 @st.cache_data
 def load_data(selected_model):
     try:
-        if selected_model == "model 1": selected_model = "models_1"
-        elif selected_model == "model 2": selected_model = "models_2"
-        elif selected_model == "model 3": selected_model = "models_3"
+        if selected_model == 'model 1': selected_model = 'models_1'
+        else: selected_model = 'models_2'
 
         # Get the absolute path to the directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Create the full path to the selected models directory
-        models_dir = os.path.join(current_dir, selected_model)
-        
-        # Load all model files from the same directory
-        df = pd.read_parquet(os.path.join(current_dir, 'steam_game_dataset_filtered.parquet'), engine="pyarrow")
-        cluster_data = np.load(os.path.join(models_dir, "dec_results.npz"))
-        df['cluster'] = cluster_data["assignments"]
-        df['release_year'] = pd.to_datetime(df['release_date'], errors='coerce').dt.year
-        latent_data = np.load(os.path.join(models_dir, "latent_features.npz"))
-        latent_features = latent_data["assignments"]
+        models_dir = os.path.join(current_dir, selected_model)     
+        # Load data from file
+        df = pd.read_parquet(os.path.join(models_dir, 'trained_data.parquet'), engine="pyarrow")
         name_to_index = pd.Series(df.index, index=df['name'])
         image_urls = pd.Series(df['header_image'].values, index=df['name']).to_dict()
         
-        return df, latent_features, name_to_index, image_urls
+        return df, name_to_index, image_urls
     except Exception as e:
         st.error(f"Error loading data: {str(e)}")
         return None, None, None, None
 
 # Recommendation function
-def get_game_recommendations(game_title, n=10, df=None, latent_features=None, 
-                             name_to_index=None, image_urls=None, year_range=(1997,2025),
-                             price_range=("Free","AAA")):
-    if df is None or latent_features is None or name_to_index is None:
-        return None, ["Data not loaded properly"]
-    try:
-        idx = name_to_index[game_title]
-        game_cluster = df.iloc[idx]['cluster']
-        game_embed = latent_features[idx].reshape(1, -1)
+def get_game_recommendations(game_title, n=10, df=None, name_to_index=None,
+                             year_range=(1997,2025), price_range=("Free","AAA"), selected_model='model 1'):
+    try: 
+        # Year filter
+        min_year, max_year = year_range
+        filtered_df = df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)].copy()
+
+        # Price filter (Only filter if at least one price range is selected)
         price_categories = {
             'Free': (0, 0),
             'Budget': (0.01, 10),
             'Mid-range': (10.01, 30),
             'AAA': (30.01, float('inf'))
         }
-        # Year filter
-        min_year, max_year = year_range
-        filtered_df = df[(df['release_year'] >= min_year) & (df['release_year'] <= max_year)]
-        # Price filter
-        if price_range:  # Only filter if at least one price range is selected
+        if price_range:
             price_conditions = []
             for price_cat in price_range:
                 min_p, max_p = price_categories[price_cat]
-                price_conditions.append(
-                    (filtered_df['price'] >= min_p) & 
-                    (filtered_df['price'] <= max_p)
-                )
+                price_conditions.append((filtered_df['price'] >= min_p) & (filtered_df['price'] <= max_p))
             filtered_df = filtered_df[np.logical_or.reduce(price_conditions)]
+        
+        # Cluster Selection    
+        idx = name_to_index[game_title]
+        cluster_1 = df.iloc[idx]['cluster_1']
+        cluster_2 = df.iloc[idx]['cluster_2']
+        # Combine cluster assignments
+        if selected_model == 'model 1':
+            cluster_mask = (filtered_df['cluster_1'] == cluster_1) | (filtered_df['cluster_2'] == cluster_2)
+        elif selected_model == 'model 2':
+            cluster_mask = (filtered_df['cluster_1'] == cluster_1)
+        elif selected_model == 'model 3':
+            cluster_mask = (filtered_df['cluster_2'] == cluster_2)
+        candidate_indices = filtered_df[cluster_mask].index.tolist()
+        if not candidate_indices: candidate_indices = df.index.tolist()
+        # Remove the query game itself
+        candidate_indices = [i for i in candidate_indices if i != idx]
+        # Calculate similarities 
+        similarities_1 = cosine_similarity(df.iloc[idx]['latent_1'].reshape(1, -1), 
+                                           np.stack(df.loc[candidate_indices, 'latent_1'].values))[0]
+        similarities_2 = cosine_similarity(df.iloc[idx]['latent_2'].reshape(1, -1), 
+                                           np.stack(df.loc[candidate_indices, 'latent_2'].values))[0]
+        # Combine similarities with weights
+        if selected_model == 'model 1':
+            similarities = 0.4 * similarities_1 + 0.6 * similarities_2
+        elif selected_model == 'model 2':
+            similarities = similarities_1
+        elif selected_model == 'model 3':
+            similarities = similarities_2
 
-        cluster_indices = filtered_df[filtered_df['cluster'] == game_cluster].index.tolist()
-        if not cluster_indices:
-            st.warning("No games found in the selected year range. Showing recommendations from all years.")
-            cluster_indices = df[df['cluster'] == game_cluster].index.tolist()
-            
-        cluster_latent = latent_features[cluster_indices]
-        similarities = cosine_similarity(game_embed, cluster_latent)[0]
-        
-        similar_indices = np.argsort(similarities)[::-1]
-        similar_indices = [cluster_indices[i] for i in similar_indices if cluster_indices[i] != idx][:n]
-        
+        # Get top N recommendations
+        top_indices = [candidate_indices[i] for i in np.argsort(similarities)[-n:][::-1]]
         recommendations = pd.DataFrame({
-            'Game': df.iloc[similar_indices]['name'].values,
-            'Similarity Score': similarities[np.argsort(similarities)[::-1]][1:n+1],
-            'Price': df.iloc[similar_indices]['price'].values,
-            'Tags': df.iloc[similar_indices]['tags_list'].values,
-            'Description': df.iloc[similar_indices]['short_description'].values
-        })  
+            'Game': df.loc[top_indices, 'name'].values,
+            'Similarity Score': similarities[np.argsort(similarities)[-n:][::-1]],
+            'Price': df.loc[top_indices, 'price'].values,
+            'Tags': df.loc[top_indices, 'tags_list'].values,
+            'Description': df.loc[top_indices, 'short_description'].values,
+            'Release Year': df.loc[top_indices, 'release_year'].values
+        })
         return recommendations, None
-    
-    except KeyError:
-        closest_matches = df[df['name'].str.contains(game_title, case=False, na=False)]['name'].tolist()
-        return None, closest_matches[:5]
-    except Exception as e:
-        st.error(f"Error generating recommendations: {str(e)}")
-        return None, ["An error occurred while generating recommendations"]
+    except Exception as e:  
+        return st.error(f"Error generating recommendations: {str(e)}")
 
 # Load data
-df, latent_features, name_to_index, image_urls = load_data(selected_model)
-
-# Check if data loaded successfully
-if df is None or latent_features is None or name_to_index is None or image_urls is None:
-    st.error("Failed to load required data files. Please check that all model files exist in the models directory.")
+df, name_to_index, image_urls = load_data(selected_model)
+if df is None or name_to_index is None or image_urls is None:
+    st.error("Failed to load required data files. Please check the models directory.")
     st.stop()
 
 # Select Box
@@ -174,12 +175,11 @@ st.divider()
 
 # Main content
 try:
-    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, latent_features, name_to_index, image_urls, year_range, price_range)
-
+    recommendations, matches = get_game_recommendations(game_query, num_recommendations, df, name_to_index,
+                                                        year_range, price_range, selected_model)
     if recommendations is not None:
         selected_idx = name_to_index[game_query]
         selected_game = df.iloc[selected_idx]
-        
         col1, col2 = st.columns([1, 2], gap="large")
         with col1:
             try:
@@ -253,11 +253,6 @@ try:
             st.divider()
     else:
         st.warning(f"Game '{game_query}' not found in the dataset. Try reduce year range.")
-        if matches:
-            st.info("Did you mean one of these games?")
-            for match in matches:
-                if st.button(match):
-                    st.experimental_rerun()
 except Exception as e:
     st.error(f"An error occurred: {str(e)}")
 
