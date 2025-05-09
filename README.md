@@ -1,5 +1,7 @@
 # Steam Game Recommendation System
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 The original dataset is from Kaggle [https://www.kaggle.com/datasets/artermiloff/steam-games-dataset](url),\
 and powered by Steam Game Scraper Repository [https://github.com/FronkonGames/Steam-Games-Scraper](url).
 
