@@ -8,8 +8,7 @@ Deployment can be implemented on [Streamlit Cloud](https://steamgamerecommender.
 
 This dataset is up to date as of March 2025.\
 The shape of original dataset is  (88899, 47), which contains multiple data types such as text, image and numerical data.\
-I will implement deep embedding clustering model to reduce the dimensionality of dataset and extract meaningful features into a latent space to find the clusters and similarity of the games.
-
+I will implement a deep embedding clustering model to reduce the dimensionality of dataset and extract meaningful features into a representation using Auto-Encoder.
 ## Step 1: Data Preprocessing
 
 The dataset has:
