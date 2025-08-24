@@ -2,9 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The original dataset is from Kaggle [https://www.kaggle.com/datasets/artermiloff/steam-games-dataset](url),\
-and powered by Steam Game Scraper Repository [https://github.com/FronkonGames/Steam-Games-Scraper](url),\
-Deployment can be implemented on Streamlit Cloud [https://steamgamerecommender.streamlit.app/](url).
+The original dataset is from [Kaggle](https://www.kaggle.com/datasets/artermiloff/steam-games-dataset),\
+and powered by [Steam Game Scraper Repository](https://github.com/FronkonGames/Steam-Games-Scraper),\
+Deployment can be implemented on [Streamlit Cloud](https://steamgamerecommender.streamlit.app/).
 
 This dataset is up to date as of March 2025.\
 The shape of original dataset is  (88899, 47), which contains multiple data types such as text, image and numerical data.\
