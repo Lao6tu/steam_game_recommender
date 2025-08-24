@@ -91,5 +91,5 @@ Since there are no ground-truth labels (unsupervised), use:
 * User Feedback (A/B testing recommendations).
 
 # Latent Space Data Clusters
-(<img width="1000" height="800" alt="data_structure_2" src="https://github.com/user-attachments/assets/21c5f0b8-c635-44c0-8db2-7001a4e04cb8"/>)
+<img width="800" height="600" alt="data_structure_2" src="https://github.com/user-attachments/assets/21c5f0b8-c635-44c0-8db2-7001a4e04cb8"/>
 
